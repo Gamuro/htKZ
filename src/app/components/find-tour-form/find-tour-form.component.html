@@ -1,0 +1,41 @@
+<form [formGroup]="findTour">
+  <mat-form-field>
+    <mat-label>Город вылета</mat-label>
+    <mat-select formControlName="departCity">
+      <mat-option *ngFor="let city of departCityList" [value]="city.id">
+        {{ city.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Страна</mat-label>
+    <mat-select formControlName="country">
+      <mat-option *ngFor="let country of countryList" [value]="country.id">
+        {{ country.name }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Дата вылета</mat-label>
+    <input matInput [matDatepicker]="picker" formControlName="date" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Кол-во ночей</mat-label>
+    <mat-select formControlName="nights">
+      <mat-option *ngFor="let day of startDays" [value]="day">
+        от {{ day }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Кол-во ночей до</mat-label>
+    <mat-select formControlName="nightsTo">
+      <mat-option *ngFor="let day of startDays" [value]="day">
+        до {{ day }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <button (click)="submit()" mat-raised-button color="accent">Найти тур</button>
+</form>
