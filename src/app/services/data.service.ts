@@ -3,7 +3,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable } from 'rxjs';
-import { tap, pluck, map } from 'rxjs/operators';
+import * as m from 'moment';
+import { arrive } from '../shared/arrive';
+import { depart } from '../shared/depart';
+import { tap } from 'rxjs/operators';
 import { Tour } from '../interfaces/tour.interface';
 
 
@@ -15,16 +18,20 @@ export class DataService {
 
   constructor(private http: HttpClient) { }
 
-  getTours(): Observable<any> {
+  getTours({ departCity, country, date, nights, nightsTo }): Observable<any> {
     let params = new HttpParams();
-    params = params.append('departCity', '10');
-    params = params.append('country', '552');
-    params = params.append('date', '2020-05-29');
+    const formatedDate = m(date).clone().format('YYYY-MM-DD');
+    const resultName =
+      `Результаты запроса (${depart[departCity].name} - ${arrive[country].name}, ${m(date).clone().format('DD mmm YYYY')}, ${nights}-${nightsTo}н.)`;
+    console.log('d', departCity, country, date, nights, nightsTo);
+    params = params.append('departCity', departCity);
+    params = params.append('country', country);
+    params = params.append('date', formatedDate);
     params = params.append('nights', '8');
     params = params.append('nightsTo', '10');
     return this.http.get<Tour[]>(this.url, { params }).pipe(
       tap(result => {
-        result.direction = 'Москва-Париж';
+        result.direction = resultName;
         result.tours.sort(((x, y) => x.price > y.price ? 1 : -1));
       })
     );

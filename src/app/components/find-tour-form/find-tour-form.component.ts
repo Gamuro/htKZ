@@ -1,8 +1,11 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
+import * as m from 'moment';
 import { DataService } from 'src/app/services/data.service';
 import { DataTour } from './../../interfaces/tour.interface';
+import { arrive } from '../../shared/arrive';
+import { depart } from '../../shared/depart';
 
 @Component({
   selector: 'app-find-tour-form',
@@ -17,40 +20,15 @@ export class FindTourFormComponent implements OnInit, OnChanges {
   public nights: FormControl;
   public nightsTo: FormControl;
   public date: FormControl;
+  public minDate: Date;
+  public maxDate: Date;
   public startDays = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   public endDays = [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-  public departCityList = [{
-    id: 10,
-    name: 'Алматы',
-    avalibleFlights: [553, 554],
-  },
-  {
-    id: 11,
-    name: 'Астана',
-  },
-  ];
-  public countryList = [
-    {
-      id: 552,
-      name: 'Турция',
-    },
-    {
-      id: 553,
-      name: 'Тайланд',
-    },
-    {
-      id: 554,
-      name: 'Чехия',
-    }
-  ];
-  public minDate;
-  public maxDate;
+  public countryList = { ...arrive };
+  public departCityList = { ...depart };
 
   constructor(private dateAdapter: DateAdapter<any>, private dataService: DataService) {
-    const currentYear = new Date().getFullYear();
-    this.minDate = new Date(currentYear - 20, 0, 1);
-    this.maxDate = new Date(currentYear + 1, 11, 31);
-    this.dateAdapter.setLocale('ru');
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -58,10 +36,14 @@ export class FindTourFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
+    this.minDate = m().clone().add(1, 'day').toDate();
+    this.maxDate = m().clone().add(60, 'day').toDate();
+    this.dateAdapter.setLocale('ru');
     this.createFormFields();
     this.createFormGroup();
-    this.findTour.valueChanges.subscribe(data => console.log('data', data));
+    this.onFormFieldsChanges();
   }
+
 
   createFormFields(): void {
     this.departCity = new FormControl();
@@ -80,10 +62,18 @@ export class FindTourFormComponent implements OnInit, OnChanges {
       date: this.date,
     });
   }
+  onFormFieldsChanges() {
+    this.findTour.valueChanges.subscribe(data => {
+      if (data.departCity) {
+        this.countryList.ids = [...this.departCityList[data.departCity].avalibleFlights];
+      } else {
+        this.countryList.ids = [...arrive.ids];
+      }
+    });
+  }
 
   submit() {
-    console.log('submit', this.findTour);
-    // this.dataService.getTours().subscribe(data => this.dataChanged.emit(data));
+    this.dataService.getTours(this.findTour.value).subscribe(data => this.dataChanged.emit(data));
   }
 
 }
