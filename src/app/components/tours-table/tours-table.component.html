@@ -3,22 +3,18 @@
   class="mat-elevation-z8"
   *ngIf="dataSource"
 >
-  <!-- Name Column -->
   <ng-container matColumnDef="hotelName">
-    <mat-header-cell *matHeaderCellDef> Отель </mat-header-cell>
+    <mat-header-cell *matHeaderCellDef>
+      {{ dataTour.direction }}
+    </mat-header-cell>
     <mat-cell *matCellDef="let element"> {{ element.hotelName }} </mat-cell>
   </ng-container>
 
-  <!-- Weight Column -->
   <ng-container matColumnDef="price">
-    <mat-header-cell *matHeaderCellDef> Цена </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element.price }} </mat-cell>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="currency">
-    <mat-header-cell *matHeaderCellDef> Валюта </mat-header-cell>
-    <mat-cell *matCellDef="let element"> {{ element.currency }} </mat-cell>
+    <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+    <mat-cell *matCellDef="let element">
+      {{ element.price }} {{ element.currency }}
+    </mat-cell>
   </ng-container>
 
   <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

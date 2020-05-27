@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DateAdapter } from '@angular/material/core';
 import * as m from 'moment';
 import { DataService } from 'src/app/services/data.service';
@@ -12,7 +12,7 @@ import { depart } from '../../shared/depart';
   templateUrl: './find-tour-form.component.html',
   styleUrls: ['./find-tour-form.component.scss']
 })
-export class FindTourFormComponent implements OnInit, OnChanges {
+export class FindTourFormComponent implements OnInit {
   @Output() dataChanged = new EventEmitter<DataTour>();
   public findTour: FormGroup;
   public departCity: FormControl;
@@ -31,9 +31,6 @@ export class FindTourFormComponent implements OnInit, OnChanges {
 
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    console.log('change', changes);
-  }
 
   ngOnInit(): void {
     this.minDate = m().clone().add(1, 'day').toDate();
@@ -46,11 +43,11 @@ export class FindTourFormComponent implements OnInit, OnChanges {
 
 
   createFormFields(): void {
-    this.departCity = new FormControl();
-    this.country = new FormControl();
-    this.nights = new FormControl();
-    this.nightsTo = new FormControl();
-    this.date = new FormControl();
+    this.departCity = new FormControl('', [Validators.required]);
+    this.country = new FormControl('', [Validators.required]);
+    this.nights = new FormControl('', [Validators.required]);
+    this.nightsTo = new FormControl('', [Validators.required]);
+    this.date = new FormControl('', [Validators.required]);
   }
 
   createFormGroup(): void {
@@ -73,7 +70,9 @@ export class FindTourFormComponent implements OnInit, OnChanges {
   }
 
   submit() {
-    this.dataService.getTours(this.findTour.value).subscribe(data => this.dataChanged.emit(data));
+    if (this.findTour.valid) {
+      this.dataService.getTours(this.findTour.value).subscribe(data => this.dataChanged.emit(data));
+    }
   }
 
 }

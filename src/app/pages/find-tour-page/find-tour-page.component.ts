@@ -18,6 +18,5 @@ export class FindTourPageComponent implements OnInit {
 
   dataChanged(event) {
     this.dataTour = event;
-    console.log('page', this.dataTour);
   }
 }

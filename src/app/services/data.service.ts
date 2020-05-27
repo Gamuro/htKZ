@@ -23,7 +23,6 @@ export class DataService {
     const formatedDate = m(date).clone().format('YYYY-MM-DD');
     const resultName =
       `Результаты запроса (${depart[departCity].name} - ${arrive[country].name}, ${m(date).clone().format('DD mmm YYYY')}, ${nights}-${nightsTo}н.)`;
-    console.log('d', departCity, country, date, nights, nightsTo);
     params = params.append('departCity', departCity);
     params = params.append('country', country);
     params = params.append('date', formatedDate);

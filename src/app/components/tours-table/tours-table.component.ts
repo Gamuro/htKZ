@@ -10,7 +10,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 })
 export class ToursTableComponent implements OnInit, OnChanges {
   @Input() dataTour: DataTour;
-  displayedColumns: string[] = ['hotelName', 'price', 'currency'];
+  displayedColumns: string[] = ['hotelName', 'price'];
   public dataSource: Tour[];
 
   constructor() { }
