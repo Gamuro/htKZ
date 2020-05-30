@@ -1,0 +1,29 @@
+$text-color: rgb(40, 40, 40);
+
+@font-face {
+  font-family: "GothamPro-Medium";
+
+  src: url("/assets/fonts/ofontruGothamPro.ttf") format("truetype"),
+    url("/assets/fonts/ofontruGothamPro.woff") format("woff"),
+    url("/assets/fonts/ofontruGothamPro.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@mixin main-font {
+  font-family: "GothamPro-Medium";
+  font-weight: 400;
+}
+@mixin info-text {
+  @include main-font;
+  text-transform: uppercase;
+  color: #fff;
+  font-size: 1rem;
+}
+
+@mixin default-text {
+  @include main-font;
+  line-height: 1.1;
+  color: $text-color;
+  font-size: 0.6875rem;
+}
